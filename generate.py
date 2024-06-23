@@ -157,7 +157,7 @@ class CrosswordCreator():
                     return False
                 for Z in self.crossword.neighbors(X) - {Y}: 
                     arcs.append((Z, X))
-        print(self.domains)
+        #print(self.domains)
         return True
     
     def assignment_complete(self, assignment):
@@ -271,7 +271,7 @@ class CrosswordCreator():
         print(assignment)
         print('\n')
         # if assignment is already ready
-        if len(assignment) == len(self.domains):
+        if self.assignment_complete(assignment):
             return assignment
 
         # selecting one of unassigned variables
@@ -284,9 +284,12 @@ class CrosswordCreator():
             assignment_copy[variable] = value
             # checking for consistency, getting result of that new assignment backtrack
             if self.consistent(assignment_copy):
+                self.ac3()
                 result = self.backtrack(assignment_copy)
                 if result is not None:
                     return result
+                #enable backtracking if no solution is found
+                assignment.pop(variable)
         return None
 
 
